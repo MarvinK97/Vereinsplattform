@@ -1,0 +1,43 @@
+<div class="jumbotron">
+  <h1>Benutzerverwaltung</h1>
+
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <label>
+        <input matInput matNativeControl (keyup)="applyFilter($event)" placeholder="Beispiel: Max" #input>
+      </label>
+    </mat-form-field>
+
+  <mat-table mat-table [dataSource]="dataSource"  matSort #TableUserSort="matSort">
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.id}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> E-Mail </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.email}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="username">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Username </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.username}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></mat-header-row>
+    <mat-row class="hover" *matRowDef="let row; columns: columnsToDisplay" (click)="onRowClicked(row)"></mat-row>
+
+    <mat-row *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </mat-row>
+
+  </mat-table>
+
+  <mat-paginator #TableUserPaginator
+                 [length]="100"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[10, 25, 100]"
+                 showFirstLastButtons>
+  </mat-paginator>
+
+
+</div>

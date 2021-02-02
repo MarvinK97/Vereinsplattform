@@ -1,0 +1,40 @@
+version: '3'
+services:
+    mysqldatabase:
+        image: mysql
+        container_name: mysqldatabase
+        environment:
+            MYSQL_ROOT_PASSWORD: N&HQ1a?.zr5N`T|JnyWp1%+^hAe0h9UO
+            MYSQL_DATABASE: vereinsplattformdb
+            MYSQL_USER: user
+            MYSQL_PASSWORD: GXkW|5\05z*km4^bCYB!h^61x:mkBOAr
+        ports:
+            - 3306:3306
+        volumes:
+            - databaseData:/var/lib/mysql
+        networks:
+            - backendNetwork
+    
+    springbackendservice:
+        container_name: springbackendservice
+        build: Backend/
+        ports: 
+            - "8080:8080"
+        networks:
+            - frontendNetwork
+            - backendNetwork
+            
+    nginx:
+        container_name: nginx
+        build: Frontend/
+        ports: 
+            - "80:80"
+        networks:
+            - frontendNetwork
+
+volumes:
+    databaseData:
+  
+networks:
+    backendNetwork:
+    frontendNetwork:
