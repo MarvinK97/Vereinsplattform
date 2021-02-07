@@ -1,0 +1,12 @@
+
+<div *ngIf="enterPageLoader">
+  Loading...
+</div>
+
+<div *ngIf="!inClub && !enterPageLoader">
+  <app-search-club></app-search-club>
+</div>
+
+<div *ngIf="inClub && !enterPageLoader">
+ <app-club-details></app-club-details>
+</div>

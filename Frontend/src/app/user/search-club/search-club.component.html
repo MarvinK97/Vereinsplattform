@@ -1,0 +1,68 @@
+<div class="jumbotron">
+
+  <a style="color: crimson">Du gehörst noch keinem Verein an! </a><br><br><br>
+
+
+
+  <h1>Finde deinen Verein</h1>
+
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <label>
+      <input matInput matNativeControl (keyup)="applyFilterClub($event)" placeholder="Beispiel: Berlin" #input>
+    </label>
+  </mat-form-field>
+
+  <mat-table mat-table [dataSource]="dataSourceClub"  matSort #TableClubSort="matSort" multiTemplateDataRows class="mat-elevation-z8">
+
+   <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let club"> {{club.name}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="street">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Straße </mat-header-cell>
+      <mat-cell *matCellDef="let club"> {{club.street}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="plz">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> PLZ </mat-header-cell>
+      <mat-cell *matCellDef="let club"> {{club.zipcode}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="ort">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Ort </mat-header-cell>
+      <mat-cell *matCellDef="let club"> {{club.city}} </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let club" [attr.colspan]="clubs.length">
+        <div class="example-element-detail" [@detailExpand]="club == expandedElement ? 'expanded' : 'collapsed'">
+          <div class="example-element-description"> Beschreibung von {{  club.name  }} </div>
+          <div style="padding-top: 10px">
+            <button mat-raised-button (click)="joinClub(club)">Join</button>
+          </div>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplayClub; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let club; columns: columnsToDisplayClub"
+             class="example-element-row"
+             [class.example-expanded-row]="expandedElement === club"
+             (click)="expandedElement = expandedElement === club ? null : club"></mat-row>
+    <mat-row *matRowDef="let club; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
+
+    <mat-row *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator #TableClubPaginator
+                 [length]="100"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[10, 25, 100]"
+                 showFirstLastButtons
+                 class="mat-elevation-z8">
+  </mat-paginator>
+
+</div>
