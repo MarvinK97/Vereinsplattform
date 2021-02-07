@@ -7,7 +7,9 @@ import vereinsplattform.backend.entity.Club;
 import vereinsplattform.backend.payload.request.JoinClubRequest;
 import vereinsplattform.backend.service.ClubService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -22,6 +24,14 @@ public class ClubController {
     @PreAuthorize("hasRole('ADMIN')")
     public List<Club> findAllClubs (){
         return clubService.getClubs();
+    }
+
+    // Get club from user
+    @GetMapping("get")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public Club findClub (HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        return clubService.getClub(token.substring(7, token.length()));
     }
 
     // Create new club
@@ -48,15 +58,17 @@ public class ClubController {
     // Join a club
     @PostMapping("/join")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public void joinClub(@RequestBody JoinClubRequest request) {
-        clubService.joinClub(request);
+    public void joinClub(@RequestBody JoinClubRequest request, HttpServletRequest header) {
+        String token = header.getHeader("Authorization");
+        clubService.joinClub(request, token.substring(7, token.length()));
     }
 
     // Leave a club
     @PostMapping("/leave")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public void leaveClub(@RequestBody JoinClubRequest request) {
-        clubService.leaveClub(request);
+    public void leaveClub(@RequestBody JoinClubRequest request, HttpServletRequest header) {
+        String token = header.getHeader("Authorization");
+        clubService.leaveClub(request, token.substring(7, token.length()));
     }
 
 }

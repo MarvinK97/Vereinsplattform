@@ -1,6 +1,7 @@
 package vereinsplattform.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import vereinsplattform.backend.entity.Club;
 import vereinsplattform.backend.entity.User;
@@ -9,11 +10,16 @@ import vereinsplattform.backend.payload.request.JoinClubRequest;
 import vereinsplattform.backend.repository.ClubRepository;
 import vereinsplattform.backend.repository.UserClubRepository;
 import vereinsplattform.backend.repository.UserRepository;
+import vereinsplattform.backend.security.jwt.JwtUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClubService {
+
+    @Autowired
+    JwtUtils jwtUtils;
 
     @Autowired
     private ClubRepository clubRepository;
@@ -26,6 +32,13 @@ public class ClubService {
 
     public List<Club> getClubs (){
         return clubRepository.findAll();
+    }
+
+    public Club getClub (String jwt){
+        User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+        UserClub userClub = userClubRepository.findByUserId(user.getId());
+        return userClub.getClub();
     }
 
     public Club saveClub(Club club) {
@@ -45,16 +58,18 @@ public class ClubService {
         clubRepository.delete(club);
     }
 
-    public void joinClub(JoinClubRequest request) {
-        User user = userRepository.getOne(request.getUserId());
+    public void joinClub(JoinClubRequest request, String jwt) {
+        User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
         Club club = clubRepository.getOne(request.getClubId());
 
         UserClub userClub = new UserClub(user, club, "member");
         userClubRepository.save(userClub);
     }
 
-    public void leaveClub(JoinClubRequest request) {
-        User user = userRepository.getOne(request.getUserId());
+    public void leaveClub(JoinClubRequest request, String jwt) {
+        User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
         Club club = clubRepository.getOne(request.getClubId());
 
         UserClub userClub = userClubRepository.findByUserIdAndClubId(user.getId(), club.getId());

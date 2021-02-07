@@ -45,8 +45,6 @@ export class ClubManagementService {
     }, httpOptions);
   }
 
-
-
 }
 
 export interface Club {

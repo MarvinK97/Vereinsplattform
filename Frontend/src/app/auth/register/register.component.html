@@ -1,10 +1,5 @@
 <div class="col-md-12">
   <div class="card card-container">
-    <img
-      id="profile-img"
-      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-      class="profile-img-card"
-      alt="nope"/>
     <form
       *ngIf="!isSuccessful"
       name="form"
@@ -14,7 +9,6 @@
     >
       <div class="form-group">
         <label [attr.for]="username">Username</label>
-        <label>
           <input
             type="text"
             class="form-control"
@@ -25,7 +19,6 @@
             maxlength="20"
             #username="ngModel"
           />
-        </label>
         <div class="alert-danger" *ngIf="f.submitted && username.invalid">
           <div *ngIf="username.errors.required">Username is required</div>
           <div *ngIf="username.errors.minlength">
@@ -38,7 +31,6 @@
       </div>
       <div class="form-group">
         <label [attr.for]="email">Email</label>
-        <label>
           <input
             type="email"
             class="form-control"
@@ -48,7 +40,6 @@
             email
             #email="ngModel"
           />
-        </label>
         <div class="alert-danger" *ngIf="f.submitted && email.invalid">
           <div *ngIf="email.errors.required">Email is required</div>
           <div *ngIf="email.errors.email">
@@ -88,3 +79,4 @@
     </div>
   </div>
 </div>
+

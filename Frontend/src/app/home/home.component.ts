@@ -8,19 +8,9 @@ import { UserService } from '../core/services/user.service';
 })
 export class HomeComponent implements OnInit {
 
-  content: string | undefined;
-
-  constructor(private userService: UserService) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.userService.getPublicContent().subscribe(
-      data => {
-        this.content = data;
-      },
-      err => {
-        this.content = JSON.parse(err.error).message;
-      }
-    );
   }
 
 }
