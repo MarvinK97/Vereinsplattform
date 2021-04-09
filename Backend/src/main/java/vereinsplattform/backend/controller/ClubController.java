@@ -1,6 +1,5 @@
 package vereinsplattform.backend.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vereinsplattform.backend.entity.Club;
@@ -9,15 +8,17 @@ import vereinsplattform.backend.service.ClubService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/club")
 public class ClubController {
 
-    @Autowired
-    private ClubService clubService;
+    private final ClubService clubService;
+
+    public ClubController(ClubService clubService) {
+        this.clubService = clubService;
+    }
 
     // Get all clubs
     @GetMapping("all")
@@ -31,7 +32,7 @@ public class ClubController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public Club findClub (HttpServletRequest request){
         String token = request.getHeader("Authorization");
-        return clubService.getClub(token.substring(7, token.length()));
+        return clubService.getClub(token.substring(7));
     }
 
     // Create new club
@@ -60,7 +61,7 @@ public class ClubController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public void joinClub(@RequestBody JoinClubRequest request, HttpServletRequest header) {
         String token = header.getHeader("Authorization");
-        clubService.joinClub(request, token.substring(7, token.length()));
+        clubService.joinClub(request, token.substring(7));
     }
 
     // Leave a club
@@ -68,7 +69,7 @@ public class ClubController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public void leaveClub(@RequestBody JoinClubRequest request, HttpServletRequest header) {
         String token = header.getHeader("Authorization");
-        clubService.leaveClub(request, token.substring(7, token.length()));
+        clubService.leaveClub(request, token.substring(7));
     }
 
 }
