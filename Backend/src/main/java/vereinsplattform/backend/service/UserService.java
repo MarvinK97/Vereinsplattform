@@ -1,6 +1,7 @@
 package vereinsplattform.backend.service;
 
 import vereinsplattform.backend.repository.UserRepository;
+
 import java.util.List;
 
 public interface UserService {

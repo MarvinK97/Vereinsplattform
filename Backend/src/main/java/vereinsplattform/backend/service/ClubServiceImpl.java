@@ -61,6 +61,8 @@ public class ClubServiceImpl implements ClubService {
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
         Club club = clubRepository.getOne(request.getClubId());
 
+        //TODO: User can only join one club
+
         UserClub userClub = new UserClub(user, club, "member");
         userClubRepository.save(userClub);
     }

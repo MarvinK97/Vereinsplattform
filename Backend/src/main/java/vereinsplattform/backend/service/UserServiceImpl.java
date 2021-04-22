@@ -2,13 +2,13 @@ package vereinsplattform.backend.service;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import java.util.List;
-
 import vereinsplattform.backend.entity.User;
 import vereinsplattform.backend.entity.UserClub;
 import vereinsplattform.backend.repository.UserClubRepository;
 import vereinsplattform.backend.repository.UserRepository;
 import vereinsplattform.backend.security.jwt.JwtUtils;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
