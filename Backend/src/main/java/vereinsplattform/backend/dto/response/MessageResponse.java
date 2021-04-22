@@ -1,4 +1,4 @@
-package vereinsplattform.backend.payload.response;
+package vereinsplattform.backend.dto.response;
 
 public class MessageResponse {
     private String message;
