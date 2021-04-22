@@ -1,7 +1,7 @@
 package vereinsplattform.backend.service;
 
 import vereinsplattform.backend.entity.Club;
-import vereinsplattform.backend.payload.request.JoinClubRequest;
+import vereinsplattform.backend.dto.request.JoinClubRequest;
 
 import java.util.List;
 

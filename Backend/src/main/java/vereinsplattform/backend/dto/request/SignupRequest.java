@@ -1,4 +1,4 @@
-package vereinsplattform.backend.payload.request;
+package vereinsplattform.backend.dto.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

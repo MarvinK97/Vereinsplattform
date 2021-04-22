@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import vereinsplattform.backend.entity.Club;
 import vereinsplattform.backend.entity.User;
 import vereinsplattform.backend.entity.UserClub;
-import vereinsplattform.backend.payload.request.JoinClubRequest;
+import vereinsplattform.backend.dto.request.JoinClubRequest;
 import vereinsplattform.backend.repository.ClubRepository;
 import vereinsplattform.backend.repository.UserClubRepository;
 import vereinsplattform.backend.repository.UserRepository;

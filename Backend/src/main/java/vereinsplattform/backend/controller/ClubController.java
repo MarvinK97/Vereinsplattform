@@ -3,7 +3,7 @@ package vereinsplattform.backend.controller;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vereinsplattform.backend.entity.Club;
-import vereinsplattform.backend.payload.request.JoinClubRequest;
+import vereinsplattform.backend.dto.request.JoinClubRequest;
 import vereinsplattform.backend.service.ClubService;
 
 import javax.servlet.http.HttpServletRequest;
