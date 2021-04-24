@@ -15,7 +15,7 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.inClub().subscribe(res => {
-      this.inClub = res;
+      this.inClub = res.status == "200 OK";
       this.enterPageLoader = false;
     })
   }

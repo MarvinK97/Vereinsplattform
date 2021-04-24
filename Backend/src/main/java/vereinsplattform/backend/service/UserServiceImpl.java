@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
         UserClub userClub = userClubRepository.findByUserId(user.getId());
 
         return userClub != null;
+
     }
 
 }

@@ -1,10 +1,14 @@
 package vereinsplattform.backend.controller;
 
+import org.aspectj.bridge.Message;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vereinsplattform.backend.dto.response.MessageResponse;
+import vereinsplattform.backend.entity.Club;
 import vereinsplattform.backend.repository.UserRepository;
 import vereinsplattform.backend.service.UserService;
 
@@ -13,7 +17,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -23,18 +27,25 @@ public class UserController {
     }
 
     //Get all users of platform
-    @GetMapping("all")
+    @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserRepository.AdminUserView> findAllUsers() {
         return userService.getUsers();
     }
 
     // Check if user is in a club
-    @GetMapping("inclub")
+    @GetMapping("/clubs")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public boolean inClub(HttpServletRequest request) {
+    public ResponseEntity<?> checkUserClub(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        return userService.inClub(token.substring(7));
+        boolean inClub = userService.inClub(token.substring(7));
+
+        if (inClub) {
+            return ResponseEntity.ok().body(new MessageResponse("User has a club!"));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
 }
