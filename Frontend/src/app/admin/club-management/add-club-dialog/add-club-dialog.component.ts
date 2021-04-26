@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import { Validators, FormGroup, FormControl} from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-club-dialog',

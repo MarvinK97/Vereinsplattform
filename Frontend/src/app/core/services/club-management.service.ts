@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
-const API_URL = 'http://localhost:8080/api/club/';
+const API_URL = 'http://localhost:8080/api/clubs/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -13,11 +13,11 @@ export class ClubManagementService {
   constructor(private http: HttpClient) { }
 
   getAllClubs(): Observable<any> {
-    return this.http.get(API_URL + 'all', { responseType: 'text' });
+    return this.http.get(API_URL + '', { responseType: 'text' });
   }
 
   createClub(club: Club): Observable<any> {
-    return this.http.post(API_URL + 'createClub', {
+    return this.http.post(API_URL + '', {
       name: club.name,
       street: club.street,
       zipcode: club.zipcode,
@@ -26,7 +26,7 @@ export class ClubManagementService {
   }
 
   updateClub(club: Club): Observable<any> {
-    return this.http.put(API_URL + 'update', {
+    return this.http.put(API_URL + '', {
       id: club.id,
       name: club.name,
       street: club.street,
@@ -36,13 +36,7 @@ export class ClubManagementService {
   }
 
   deleteClub(club: Club): Observable<any> {
-    return this.http.put(API_URL + 'delete', {
-      id: club.id,
-      name: club.name,
-      street: club.street,
-      zipcode: club.zipcode,
-      city: club.city,
-    }, httpOptions);
+    return this.http.delete(API_URL + club.id);
   }
 
 }

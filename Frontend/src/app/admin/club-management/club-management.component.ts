@@ -1,13 +1,13 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
-import { ClubManagementService } from '../../core/services/club-management.service';
-import { AddClubDialogComponent} from './add-club-dialog/add-club-dialog.component';
-import { EditClubDialogComponent } from './edit-club-dialog/edit-club-dialog.component';
+import {ClubManagementService} from '../../core/services/club-management.service';
+import {AddClubDialogComponent} from './add-club-dialog/add-club-dialog.component';
+import {EditClubDialogComponent} from './edit-club-dialog/edit-club-dialog.component';
 
 export interface Club {
   id: number;
@@ -89,7 +89,8 @@ export class ClubManagementComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .subscribe(res => {
         if (res === 'delete') {
-          this.clubManagementService.deleteClub(row).subscribe(() => {
+          this.clubManagementService.deleteClub(row).subscribe((res) => {
+            console.log(res);
             this.getClubList();
           });
         } else {

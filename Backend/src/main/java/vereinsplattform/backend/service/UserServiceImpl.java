@@ -31,12 +31,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean inClub(String jwt) {
+    public Long inClub(String jwt) {
         User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
         UserClub userClub = userClubRepository.findByUserId(user.getId());
 
-        return userClub != null;
+        if (userClub != null) {
+            return userClub.getClub().getId();
+        } else {
+            return null;
+        }
+
 
     }
 

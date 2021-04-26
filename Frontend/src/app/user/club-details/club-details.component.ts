@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ClubService} from "../../core/services/club.service";
 
 @Component({
@@ -25,7 +25,7 @@ export class ClubDetailsComponent implements OnInit {
   }
 
   leaveClub() {
-    this.clubService.leaveClub(this.club.id).subscribe( res => {
+    this.clubService.leaveClub(this.club.id).subscribe( () => {
       window.location.reload();
     });
 

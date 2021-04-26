@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {UserService} from "../core/services/user.service";
+import {Component, OnInit} from '@angular/core';
+import {ClubService} from "../core/services/club.service";
 
 @Component({
   selector: 'app-user',
@@ -11,11 +11,11 @@ export class UserComponent implements OnInit {
   enterPageLoader: boolean = true;
   inClub: boolean;
 
-  constructor(private userService: UserService) { }
+  constructor(private clubService: ClubService) { }
 
   ngOnInit(): void {
-    this.userService.inClub().subscribe(res => {
-      this.inClub = res.status == "200 OK";
+    this.clubService.getClub().subscribe(res => {
+      this.inClub = res != null;
       this.enterPageLoader = false;
     })
   }

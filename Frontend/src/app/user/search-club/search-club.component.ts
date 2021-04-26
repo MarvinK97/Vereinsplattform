@@ -4,7 +4,6 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ClubManagementService} from "../../core/services/club-management.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {Router} from "@angular/router";
 import {ClubService} from "../../core/services/club.service";
 
 
@@ -65,9 +64,9 @@ export class SearchClubComponent implements OnInit, AfterViewInit {
   }
 
   joinClub(club: Club): void {
-    console.log(club.id);
     this.clubService.joinClub(club.id).subscribe(
       data => {
+        console.log(JSON.stringify(data));
         window.location.reload();
       }
     );

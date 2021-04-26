@@ -10,8 +10,8 @@ public interface UserService {
         return null;
     }
 
-    default boolean inClub(String jwt) {
-        return false;
+    default Long inClub(String jwt) {
+        return null;
     }
 
 }

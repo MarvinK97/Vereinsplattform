@@ -1,22 +1,7 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  ViewChild,
-  TemplateRef,
-} from '@angular/core';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  addHours,
-} from 'date-fns';
-import { Subject } from 'rxjs';
-import {
-  CalendarEvent,
-  CalendarView,
-} from 'angular-calendar';
+import {ChangeDetectionStrategy, Component, TemplateRef, ViewChild,} from '@angular/core';
+import {addDays, addHours, endOfDay, endOfMonth, startOfDay, subDays,} from 'date-fns';
+import {Subject} from 'rxjs';
+import {CalendarEvent, CalendarView,} from 'angular-calendar';
 
 const colors: any = {
   red: {

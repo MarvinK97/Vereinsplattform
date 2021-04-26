@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import vereinsplattform.backend.entity.Club;
 import vereinsplattform.backend.entity.User;
 import vereinsplattform.backend.entity.UserClub;
-import vereinsplattform.backend.dto.request.JoinClubRequest;
 import vereinsplattform.backend.repository.ClubRepository;
 import vereinsplattform.backend.repository.UserClubRepository;
 import vereinsplattform.backend.repository.UserRepository;
@@ -36,6 +35,7 @@ public class ClubServiceImpl implements ClubService {
         User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
         UserClub userClub = userClubRepository.findByUserId(user.getId());
+        if (userClub == null) return null;
         return userClub.getClub();
     }
 
@@ -52,25 +52,27 @@ public class ClubServiceImpl implements ClubService {
         return clubRepository.save(clubToUpdate);
     }
 
-    public void deleteClub(Club club) {
+    public void deleteClub(Long id) {
+        Club club = clubRepository.getOne(id);
         clubRepository.delete(club);
     }
 
-    public void joinClub(JoinClubRequest request, String jwt) {
+    public Club joinClub(Long clubid, String jwt) {
         User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
-        Club club = clubRepository.getOne(request.getClubId());
+        Club club = clubRepository.getOne(clubid);
 
         //TODO: User can only join one club
 
         UserClub userClub = new UserClub(user, club, "member");
         userClubRepository.save(userClub);
+        return club;
     }
 
-    public void leaveClub(JoinClubRequest request, String jwt) {
+    public void leaveClub(Long clubid, String jwt) {
         User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
-        Club club = clubRepository.getOne(request.getClubId());
+        Club club = clubRepository.getOne(clubid);
 
         UserClub userClub = userClubRepository.findByUserIdAndClubId(user.getId(), club.getId());
         userClubRepository.delete(userClub);

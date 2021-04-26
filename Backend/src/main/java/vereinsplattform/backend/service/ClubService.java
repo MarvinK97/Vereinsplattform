@@ -1,7 +1,6 @@
 package vereinsplattform.backend.service;
 
 import vereinsplattform.backend.entity.Club;
-import vereinsplattform.backend.dto.request.JoinClubRequest;
 
 import java.util.List;
 
@@ -23,15 +22,16 @@ public interface ClubService {
         return null;
     }
 
-    default void deleteClub(Club club) {
+    default void deleteClub(Long club) {
 
     }
 
-    default void joinClub(JoinClubRequest request, String jwt) {
+    default Club joinClub(Long request, String jwt) {
 
+        return null;
     }
 
-    default void leaveClub(JoinClubRequest request, String jwt) {
+    default void leaveClub(Long request, String jwt) {
 
     }
 

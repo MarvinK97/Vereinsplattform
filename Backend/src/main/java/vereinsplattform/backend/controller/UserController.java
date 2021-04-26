@@ -1,14 +1,11 @@
 package vereinsplattform.backend.controller;
 
-import org.aspectj.bridge.Message;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vereinsplattform.backend.dto.response.MessageResponse;
-import vereinsplattform.backend.entity.Club;
 import vereinsplattform.backend.repository.UserRepository;
 import vereinsplattform.backend.service.UserService;
 
@@ -38,12 +35,12 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> checkUserClub(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        boolean inClub = userService.inClub(token.substring(7));
+        Long clubId = userService.inClub(token.substring(7));
 
-        if (inClub) {
-            return ResponseEntity.ok().body(new MessageResponse("User has a club!"));
+        if (clubId != null) {
+            return ResponseEntity.ok().body(clubId);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body("");
         }
 
     }

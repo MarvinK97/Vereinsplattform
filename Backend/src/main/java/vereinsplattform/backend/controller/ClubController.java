@@ -1,17 +1,19 @@
 package vereinsplattform.backend.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vereinsplattform.backend.entity.Club;
-import vereinsplattform.backend.dto.request.JoinClubRequest;
 import vereinsplattform.backend.service.ClubService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/club")
+@RequestMapping("/api/clubs")
 public class ClubController {
 
     private final ClubService clubService;
@@ -21,55 +23,66 @@ public class ClubController {
     }
 
     // Get all clubs
-    @GetMapping("all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List<Club> findAllClubs (){
         return clubService.getClubs();
     }
 
-    // Get club from user
-    @GetMapping("get")
+    // Get club from the requesting user
+    @GetMapping("users")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public Club findClub (HttpServletRequest request){
+    public ResponseEntity<Club> findClub (HttpServletRequest request){
         String token = request.getHeader("Authorization");
-        return clubService.getClub(token.substring(7));
+        Club club = clubService.getClub(token.substring(7));
+        return ResponseEntity.ok().body(club);
     }
 
     // Create new club
-    @PostMapping("createClub")
+    @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public Club createClub (@RequestBody Club club){
       return clubService.saveClub(club);
     }
 
     // Update existing club
-    @PutMapping("/update")
+    @PutMapping("")
     @PreAuthorize("hasRole('ADMIN')")
-    public Club updateClub(@RequestBody Club club) {
-        return clubService.updateClub(club);
+    public ResponseEntity<Club> updateClub(@RequestBody Club club) {
+        Club updatedClub = clubService.updateClub(club);
+        return ResponseEntity.ok().body(updatedClub);
     }
 
     // Delete existing club
-    @PutMapping("/delete")
+    @DeleteMapping("{clubid}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteClub(@RequestBody Club club){
-        clubService.deleteClub(club);
+    public Map<String, Boolean> deleteClub(@PathVariable Long clubid){
+        clubService.deleteClub(clubid);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
 
     // Join a club
-    @PostMapping("/join")
+    @PutMapping("users/{clubid}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public void joinClub(@RequestBody JoinClubRequest request, HttpServletRequest header) {
+    public ResponseEntity<?> joinClub(@PathVariable Long clubid, HttpServletRequest header) {
         String token = header.getHeader("Authorization");
-        clubService.joinClub(request, token.substring(7));
+        Club joinedClub = clubService.joinClub(clubid, token.substring(7));
+        return ResponseEntity.ok().body(joinedClub.getId());
     }
 
     // Leave a club
-    @PostMapping("/leave")
+    @DeleteMapping("users/{clubid}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public void leaveClub(@RequestBody JoinClubRequest request, HttpServletRequest header) {
+    public Map<String, Boolean> leaveClub(@PathVariable Long clubid, HttpServletRequest header) {
         String token = header.getHeader("Authorization");
-        clubService.leaveClub(request, token.substring(7));
+        clubService.leaveClub(clubid, token.substring(7));
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("left", Boolean.TRUE);
+        return response;
     }
 
 }
