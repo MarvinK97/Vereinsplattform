@@ -3,6 +3,7 @@ package vereinsplattform.backend.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "name")
         })
-public class Club {
+public class Club implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,10 @@ public class Club {
 
     @OneToMany(mappedBy = "club")
     protected Set<UserClub> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "club", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Notification> notifications;
 
     public Club() {
 
