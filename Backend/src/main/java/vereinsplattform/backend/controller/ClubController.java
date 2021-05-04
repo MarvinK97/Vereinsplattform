@@ -70,6 +70,7 @@ public class ClubController {
     public ResponseEntity<?> joinClub(@PathVariable Long clubid, HttpServletRequest header) {
         String token = header.getHeader("Authorization");
         Club joinedClub = clubService.joinClub(clubid, token.substring(7));
+        if (joinedClub == null) return null;
         return ResponseEntity.ok().body(joinedClub.getId());
     }
 

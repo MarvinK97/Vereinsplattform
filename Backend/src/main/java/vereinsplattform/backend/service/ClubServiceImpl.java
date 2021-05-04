@@ -19,12 +19,14 @@ public class ClubServiceImpl implements ClubService {
     private final ClubRepository clubRepository;
     private final UserRepository userRepository;
     private final UserClubRepository userClubRepository;
+    private final UserService userService;
 
-    public ClubServiceImpl(JwtUtils jwtUtils, ClubRepository clubRepository, UserRepository userRepository, UserClubRepository userClubRepository) {
+    public ClubServiceImpl(JwtUtils jwtUtils, ClubRepository clubRepository, UserRepository userRepository, UserClubRepository userClubRepository, UserService userService) {
         this.jwtUtils = jwtUtils;
         this.clubRepository = clubRepository;
         this.userRepository = userRepository;
         this.userClubRepository = userClubRepository;
+        this.userService = userService;
     }
 
     public List<Club> getClubs (){
@@ -61,12 +63,13 @@ public class ClubServiceImpl implements ClubService {
         User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
         Club club = clubRepository.getOne(clubid);
-
-        //TODO: User can only join one club
-
-        UserClub userClub = new UserClub(user, club, "member");
-        userClubRepository.save(userClub);
-        return club;
+        Long inClub = this.userService.inClub(user);
+        if (inClub == null) {
+            UserClub userClub = new UserClub(user, club, "member");
+            userClubRepository.save(userClub);
+            return club;
+        }
+        return null;
     }
 
     public void leaveClub(Long clubid, String jwt) {

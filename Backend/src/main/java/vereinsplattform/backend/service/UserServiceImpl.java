@@ -41,8 +41,17 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
+    }
 
+    @Override
+    public Long inClub(User user) {
+        UserClub userClub = userClubRepository.findByUserId(user.getId());
 
+        if (userClub != null) {
+            return userClub.getClub().getId();
+        } else {
+            return null;
+        }
     }
 
 }

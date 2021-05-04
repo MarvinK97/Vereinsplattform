@@ -10,13 +10,14 @@ import {ProfileComponent} from './profile/profile.component';
 import {MatCardModule} from "@angular/material/card";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {AuthGuard} from "../core/guards/auth.guard";
 
 
 const routes: Routes = [
   { path: '', component: AuthComponent},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'profile', component: ProfileComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

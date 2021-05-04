@@ -6,10 +6,11 @@ import {UserMaterialModule} from "./user-material.module";
 import {UserComponent} from "./user.component";
 import {SearchClubComponent} from './search-club/search-club.component';
 import {ClubDetailsComponent} from "./club-details/club-details.component";
+import {AuthGuard} from "../core/guards/auth.guard";
 
 
 const routes: Routes = [
-  { path: '', component: UserComponent}
+  { path: '', component: UserComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
