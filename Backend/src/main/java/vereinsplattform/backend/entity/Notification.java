@@ -3,7 +3,6 @@ package vereinsplattform.backend.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -23,17 +22,16 @@ public class Notification implements Serializable {
 
     private Timestamp editedAt = new Timestamp(System.currentTimeMillis());
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "club_id", nullable = false)
-    private Club club;
+    @NotBlank
+    private Long clubId;
 
     public Notification(){
 
     }
 
-    public Notification(String message, Club club) {
+    public Notification(String message, Long clubId) {
         this.message = message;
-        this.club = club;
+        this.clubId = clubId;
     }
 
     public Long getId() {
@@ -60,12 +58,12 @@ public class Notification implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Club getClub() {
-        return club;
+    public Long getClubId() {
+        return clubId;
     }
 
-    public void setClub(Club club) {
-        this.club = club;
+    public void setClubId(Long clubId) {
+        this.clubId = clubId;
     }
 
     public Timestamp getEditedAt() {
@@ -83,7 +81,20 @@ public class Notification implements Serializable {
                 ", message='" + message + '\'' +
                 ", createdAt=" + createdAt +
                 ", editedAt=" + editedAt +
-                ", club=" + club +
+                ", clubId=" + clubId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification that = (Notification) o;
+        return getId().equals(that.getId()) && getMessage().equals(that.getMessage()) && getCreatedAt().equals(that.getCreatedAt()) && getEditedAt().equals(that.getEditedAt()) && getClubId().equals(that.getClubId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getMessage(), getCreatedAt(), getEditedAt(), getClubId());
     }
 }

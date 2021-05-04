@@ -37,10 +37,6 @@ public class Club implements Serializable {
     @OneToMany(mappedBy = "club")
     protected Set<UserClub> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "club", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private Set<Notification> notifications;
-
     public Club() {
 
     }

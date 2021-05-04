@@ -1,9 +1,9 @@
 package vereinsplattform.backend.service;
 
 import vereinsplattform.backend.entity.Notification;
-import vereinsplattform.backend.repository.NotificationRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface NotificationService {
 
@@ -11,9 +11,9 @@ public interface NotificationService {
         return null;
     }
 
-    default List<Notification> getNotifications(Long clubId) {return null; }
+    default List<Notification> getClubNotifications(Long clubId) {return null; }
 
-    default Notification getNotification(Long id){
+    default Optional<Notification> getNotification(Long NotificationId){
         return null;
     }
 
