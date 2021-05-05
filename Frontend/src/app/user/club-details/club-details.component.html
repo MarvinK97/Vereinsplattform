@@ -38,7 +38,15 @@
 
   <div>
     <h2>Join-Requests</h2>
-
+    <mat-list *ngFor="let a of activeRequests">
+      <mat-list-item> ID: {{ a?.id }} </mat-list-item>
+      <mat-list-item> UserId: {{ a?.userId }} </mat-list-item>
+      <mat-list-item> Username: To Be Done! </mat-list-item>
+      <mat-list-item> CreatedAt: {{ a?.createdAt }} </mat-list-item>
+      <br>
+      <button mat-raised-button color="primary" (click)="acceptRequest(a?.id)">Accept</button>
+      <mat-divider></mat-divider>
+    </mat-list>
   </div>
 
 </div>

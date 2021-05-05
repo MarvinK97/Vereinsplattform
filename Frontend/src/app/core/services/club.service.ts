@@ -27,4 +27,12 @@ export class ClubService {
     return  this.http.delete(API_URL + 'users/' + id, httpOptions);
   }
 
+  getActiveRequests(clubid: number): Observable<any> {
+    return this.http.get(API_URL + clubid + "/activerequests");
+  }
+
+  acceptRequest(id: number): Observable<any> {
+    return this.http.put(API_URL + "requests/" + id, httpOptions);
+  }
+
 }

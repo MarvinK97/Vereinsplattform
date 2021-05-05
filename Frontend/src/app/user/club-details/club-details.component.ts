@@ -11,6 +11,7 @@ export class ClubDetailsComponent implements OnInit {
 
   club: Club;
   news: News[];
+  activeRequests: Requests[];
   enterPageLoader: boolean = true;
 
   constructor(private clubService: ClubService, private newsfeedService: NewsfeedService) { }
@@ -29,6 +30,13 @@ export class ClubDetailsComponent implements OnInit {
   getNewsfeed(clubid: number) {
     this.newsfeedService.getNewsfeed(clubid).subscribe( data => {
       this.news = data;
+      this.getActiveRequests(clubid)
+    })
+  }
+
+  getActiveRequests(clubid: number) {
+    this.clubService.getActiveRequests(clubid).subscribe(data => {
+      this.activeRequests = data;
       this.enterPageLoader = false;
     })
   }
@@ -37,6 +45,13 @@ export class ClubDetailsComponent implements OnInit {
     this.clubService.leaveClub(this.club.id).subscribe( () => {
       window.location.reload();
     });
+  }
+
+  acceptRequest(id: number){
+    this.clubService.acceptRequest(id).subscribe(data => {
+      console.log("User accepted: " + data);
+      window.location.reload();
+    })
   }
 
 }
@@ -53,4 +68,13 @@ export interface News {
   message: string;
   id: number;
   createdAt: string;
+}
+
+export interface Requests {
+  id: number;
+  userId: number;
+  clubId: number;
+  createdAt: string;
+  editedAt: string;
+  accepted: boolean;
 }
