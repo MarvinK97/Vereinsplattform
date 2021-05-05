@@ -2,11 +2,19 @@ package vereinsplattform.backend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import vereinsplattform.backend.entity.Club;
+import vereinsplattform.backend.entity.JoinRequest;
+import vereinsplattform.backend.entity.User;
+import vereinsplattform.backend.repository.JoinRequestRepository;
+import vereinsplattform.backend.repository.UserRepository;
 import vereinsplattform.backend.service.ClubService;
+import vereinsplattform.backend.security.jwt.JwtUtils;
+import vereinsplattform.backend.service.JoinRequestService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,10 +24,22 @@ import java.util.Map;
 @RequestMapping("/api/clubs")
 public class ClubController {
 
+    private final JwtUtils jwtUtils;
     private final ClubService clubService;
+    private final UserRepository userRepository;
+    private final JoinRequestService joinRequestService;
+    private final JoinRequestRepository joinRequestRepository;
 
-    public ClubController(ClubService clubService) {
+    public ClubController(JwtUtils jwtUtils,
+                          ClubService clubService,
+                          UserRepository userRepository,
+                          JoinRequestService joinRequestService,
+                          JoinRequestRepository joinRequestRepository) {
+        this.jwtUtils = jwtUtils;
         this.clubService = clubService;
+        this.userRepository = userRepository;
+        this.joinRequestService = joinRequestService;
+        this.joinRequestRepository = joinRequestRepository;
     }
 
     // Get all clubs
@@ -64,14 +84,23 @@ public class ClubController {
         return response;
     }
 
-    // Join a club
+    // Request to join a club
     @PutMapping("users/{clubid}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<?> joinClub(@PathVariable Long clubid, HttpServletRequest header) {
+    public ResponseEntity<?> joinClubRequest(@PathVariable Long clubid, HttpServletRequest header) {
         String token = header.getHeader("Authorization");
-        Club joinedClub = clubService.joinClub(clubid, token.substring(7));
-        if (joinedClub == null) return null;
-        return ResponseEntity.ok().body(joinedClub.getId());
+        User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(token.substring(7)))
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+
+        //User can only make one request at a time
+        if (joinRequestService.existsJoinRequest(user.getId())) {
+            return ResponseEntity.ok().body(null);
+        }
+
+        JoinRequest request = new JoinRequest(user.getId(), clubid);
+        JoinRequest requestCheck = joinRequestService.saveJoinRequest(request);
+        if (requestCheck == null) return null;
+        return ResponseEntity.ok().body(request.getId());
     }
 
     // Leave a club
@@ -84,6 +113,26 @@ public class ClubController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("left", Boolean.TRUE);
         return response;
+    }
+
+    // Get all Requests of a Club
+    @GetMapping("{clubid}/requests")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public List<JoinRequest> findAllRequests (@PathVariable Long clubid) {
+        return joinRequestService.getJoinRequests(clubid);
+    }
+
+    // Accept a JoinRequest
+    @PutMapping("requests/{requestid}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<?> acceptRequest(@PathVariable Long requestid) {
+        JoinRequest request = joinRequestRepository.getOne(requestid);
+        Club joinedClub = clubService.joinClub(request.getClubId(), request.getUserId());
+        if (joinedClub == null) return null;
+        request.setAccepted(true);
+        request.setEditedAt(new Timestamp(System.currentTimeMillis()));
+        joinRequestService.updateJoinRequest(request);
+        return ResponseEntity.ok().body(true);
     }
 
 }

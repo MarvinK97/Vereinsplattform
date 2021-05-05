@@ -64,11 +64,12 @@ public class ClubServiceImpl implements ClubService {
         clubRepository.delete(club);
     }
 
-    // Requesting User Joins Club
-    public Club joinClub(Long clubid, String jwt) {
-        User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+    // User Joins Club
+    public Club joinClub(Long clubid, Long userid) {
+        User user = userRepository.getOne(userid);
         Club club = clubRepository.getOne(clubid);
+
+        // User can only join one Club
         Long inClub = this.userService.inClub(user);
         if (inClub == null) {
             UserClub userClub = new UserClub(user, club, "member");

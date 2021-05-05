@@ -26,7 +26,7 @@ public interface ClubService {
 
     }
 
-    default Club joinClub(Long request, String jwt) {
+    default Club joinClub(Long clubid, Long userid) {
 
         return null;
     }
