@@ -29,10 +29,12 @@ public class ClubServiceImpl implements ClubService {
         this.userService = userService;
     }
 
+    // Get all Clubs
     public List<Club> getClubs (){
         return clubRepository.findAll();
     }
 
+    // Get Club from requesting User
     public Club getClub (String jwt){
         User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
@@ -41,10 +43,12 @@ public class ClubServiceImpl implements ClubService {
         return userClub.getClub();
     }
 
+    // save a new Club
     public Club saveClub(Club club) {
         return clubRepository.save(club);
     }
 
+    // Update Club
     public Club updateClub(Club club) {
         Club clubToUpdate = clubRepository.getOne(club.getId());
         clubToUpdate.setName(club.getName());
@@ -54,11 +58,13 @@ public class ClubServiceImpl implements ClubService {
         return clubRepository.save(clubToUpdate);
     }
 
+    // Delete Club
     public void deleteClub(Long id) {
         Club club = clubRepository.getOne(id);
         clubRepository.delete(club);
     }
 
+    // Requesting User Joins Club
     public Club joinClub(Long clubid, String jwt) {
         User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
@@ -72,6 +78,7 @@ public class ClubServiceImpl implements ClubService {
         return null;
     }
 
+    // Requesting User leaves his Club
     public void leaveClub(Long clubid, String jwt) {
         User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(jwt))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
