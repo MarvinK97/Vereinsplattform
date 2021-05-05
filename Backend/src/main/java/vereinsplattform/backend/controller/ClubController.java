@@ -9,8 +9,8 @@ import vereinsplattform.backend.entity.JoinRequest;
 import vereinsplattform.backend.entity.User;
 import vereinsplattform.backend.repository.JoinRequestRepository;
 import vereinsplattform.backend.repository.UserRepository;
-import vereinsplattform.backend.service.ClubService;
 import vereinsplattform.backend.security.jwt.JwtUtils;
+import vereinsplattform.backend.service.ClubService;
 import vereinsplattform.backend.service.JoinRequestService;
 
 import javax.servlet.http.HttpServletRequest;
