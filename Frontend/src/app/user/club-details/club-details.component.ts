@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ClubService} from "../../core/services/club.service";
+import {NewsfeedService} from "../../core/services/newsfeed.service";
 
 @Component({
   selector: 'app-club-details',
@@ -9,9 +10,10 @@ import {ClubService} from "../../core/services/club.service";
 export class ClubDetailsComponent implements OnInit {
 
   club: Club;
+  news: News[];
   enterPageLoader: boolean = true;
 
-  constructor(private clubService: ClubService) { }
+  constructor(private clubService: ClubService, private newsfeedService: NewsfeedService) { }
 
   ngOnInit(): void {
     this.getClub();
@@ -20,6 +22,13 @@ export class ClubDetailsComponent implements OnInit {
   getClub() {
     this.clubService.getClub().subscribe(res => {
       this.club = res;
+      this.getNewsfeed(this.club.id);
+    })
+  }
+
+  getNewsfeed(clubid: number) {
+    this.newsfeedService.getNewsfeed(clubid).subscribe( data => {
+      this.news = data;
       this.enterPageLoader = false;
     })
   }
@@ -28,7 +37,6 @@ export class ClubDetailsComponent implements OnInit {
     this.clubService.leaveClub(this.club.id).subscribe( () => {
       window.location.reload();
     });
-
   }
 
 }
@@ -39,4 +47,10 @@ export interface Club {
   street: string;
   zipcode: string;
   city: string;
+}
+
+export interface News {
+  message: string;
+  id: number;
+  createdAt: string;
 }

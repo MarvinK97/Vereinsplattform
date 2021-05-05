@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vereinsplattform.backend.dto.request.CreateNotificationRequest;
 import vereinsplattform.backend.entity.Notification;
+import vereinsplattform.backend.repository.NotificationRepository;
 import vereinsplattform.backend.service.NotificationService;
 
 import java.util.HashMap;
@@ -38,7 +39,7 @@ public class NotificationController {
     // Get all Notification from a Club
     @GetMapping("clubs/{clubid}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public List<Notification> findAllNotifications (@PathVariable Long clubid) {
+    public List<NotificationRepository.Newsfeed> findAllNotifications (@PathVariable Long clubid) {
        return notificationService.getClubNotifications(clubid);
     }
 

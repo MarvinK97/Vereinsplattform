@@ -24,7 +24,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     // All Notifications of one club
     @Override
-    public List<Notification> getClubNotifications(Long clubId) {
+    public List<NotificationRepository.Newsfeed> getClubNotifications(Long clubId) {
         return notificationRepository.findByClubId(clubId);
     }
 

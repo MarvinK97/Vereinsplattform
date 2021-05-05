@@ -125,6 +125,13 @@ public class ClubController {
         return joinRequestService.getJoinRequests(clubid);
     }
 
+    // Get all active Requests of a Club
+    @GetMapping("{clubid}/activerequests")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public List<JoinRequest> findAllActiveRequests (@PathVariable Long clubid) {
+        return joinRequestRepository.findAllByClubIdAndAccepted(clubid, false);
+    }
+
     // Get active Request of User
     @GetMapping("users/requests")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")

@@ -2,13 +2,47 @@
 
 <div *ngIf="!enterPageLoader">
 
-  <mat-list>
-    <mat-list-item> Name: {{ club?.name }} </mat-list-item>
-    <mat-list-item> Street: {{ club?.street }} </mat-list-item>
-    <mat-list-item> Zipcode: {{ club?.zipcode }} </mat-list-item>
-    <mat-list-item> City: {{ club?.city }} </mat-list-item>
-  </mat-list>
+  <div>
+    <h2>Club-Details</h2>
+    <mat-list>
+      <mat-list-item> Name: {{ club?.name }} </mat-list-item>
+      <mat-list-item> Street: {{ club?.street }} </mat-list-item>
+      <mat-list-item> Zipcode: {{ club?.zipcode }} </mat-list-item>
+      <mat-list-item> City: {{ club?.city }} </mat-list-item>
+    </mat-list>
 
-  <button mat-raised-button color="warn" (click)="leaveClub()">Leave</button>
+    <button mat-raised-button color="warn" (click)="leaveClub()">Leave Club</button>
+  </div>
+
+  <br>
+  <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
+  <br>
+
+  <div>
+    <h2>Newsfeed</h2>
+    <mat-list *ngFor="let n of news">
+      <mat-list-item> ID: {{ n?.id }} </mat-list-item>
+      <mat-list-item> Message: {{ n?.message }} </mat-list-item>
+      <mat-list-item> CreatedAt: {{ n?.createdAt }} </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-list>
+  </div>
+
+  <br>
+  <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
+  <br>
+
+  <div>
+    <h2>Join-Requests</h2>
+
+  </div>
 
 </div>
+
+
+
+

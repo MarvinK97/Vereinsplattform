@@ -17,4 +17,7 @@ public interface JoinRequestRepository extends JpaRepository <JoinRequest, Long>
 
     @Query("SELECT j FROM JoinRequest j WHERE j.userId = ?1 AND j.accepted = ?2")
     JoinRequest findByUserIdAndAccepted(Long userId, boolean accepted);
+
+    @Query("SELECT j FROM JoinRequest j WHERE j.clubId = ?1 AND j.accepted = ?2")
+    List<JoinRequest> findAllByClubIdAndAccepted(Long clubId, boolean accepted);
 }

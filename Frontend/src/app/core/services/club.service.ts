@@ -16,7 +16,7 @@ export class ClubService {
   constructor(private http: HttpClient) { }
 
   getClub(): Observable<any>  {
-    return this.http.get(API_URL + 'users')
+    return this.http.get(API_URL + 'users');
   }
 
   joinClub(id: number): Observable<any> {
@@ -24,7 +24,7 @@ export class ClubService {
   }
 
   leaveClub(id: number): Observable<any> {
-    return  this.http.delete(API_URL + 'users/' + id, httpOptions)
+    return  this.http.delete(API_URL + 'users/' + id, httpOptions);
   }
 
 }
