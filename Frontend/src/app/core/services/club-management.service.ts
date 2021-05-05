@@ -39,6 +39,14 @@ export class ClubManagementService {
     return this.http.delete(API_URL + club.id);
   }
 
+  getActiveRequest(): Observable<any> {
+    return this.http.get(API_URL + 'users/requests');
+  }
+
+  deleteActiveRequest(): Observable<any> {
+    return this.http.delete(API_URL + 'requests');
+  }
+
 }
 
 export interface Club {
@@ -48,3 +56,4 @@ export interface Club {
   zipcode: string;
   city: string;
 }
+

@@ -21,6 +21,7 @@ import {ClubService} from "../../core/services/club.service";
 })
 export class SearchClubComponent implements OnInit, AfterViewInit {
 
+  activeRequest: string | null = null;
   clubs: string | undefined;
   columnsToDisplayClub = ['name', 'street', 'plz', 'ort'];
   expandedElement: Club | null;
@@ -34,6 +35,7 @@ export class SearchClubComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getClubList();
+    this.getActiveRequest();
   }
 
   ngAfterViewInit(): void {
@@ -72,6 +74,25 @@ export class SearchClubComponent implements OnInit, AfterViewInit {
     );
   }
 
+  getActiveRequest(): void {
+    this.clubManagementService.getActiveRequest().subscribe(
+      data => {
+        if (data != null) {
+          this.activeRequest = data;
+        }
+      }
+    )
+  }
+
+  deleteActiveRequest(): void {
+    console.log("111111111111111")
+    this.clubManagementService.deleteActiveRequest().subscribe(
+      data => {
+        console.log(JSON.stringify(data));
+        window.location.reload();
+      }
+    )
+  }
 
 }
 
@@ -82,3 +103,4 @@ export interface Club {
   zipcode: string;
   city: string;
 }
+

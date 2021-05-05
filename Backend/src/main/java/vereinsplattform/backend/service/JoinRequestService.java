@@ -22,6 +22,8 @@ public interface JoinRequestService {
 
     default boolean existsJoinRequest(Long userId) {return true; }
 
+    void deleteJoinRequest(JoinRequest joinRequest);
+
     default void accomplishJoinRequest(Long id) {}
 
 }

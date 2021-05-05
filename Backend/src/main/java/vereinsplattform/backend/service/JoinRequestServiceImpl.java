@@ -44,6 +44,11 @@ public class JoinRequestServiceImpl implements JoinRequestService{
         return joinRequestRepository.save(RequestToUpdate);
     }
 
+    // Delete JoinRequest
+    public void deleteJoinRequest(JoinRequest joinRequest) {
+        joinRequestRepository.delete(joinRequest);
+    }
+
     // Accomplish a JoinRequest and delete it
     @Override
     public void accomplishJoinRequest(Long id) {

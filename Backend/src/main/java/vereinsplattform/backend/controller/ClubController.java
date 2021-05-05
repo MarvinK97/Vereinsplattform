@@ -1,5 +1,6 @@
 package vereinsplattform.backend.controller;
 
+import org.hibernate.mapping.Join;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -93,7 +94,9 @@ public class ClubController {
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
 
         //User can only make one request at a time
-        if (joinRequestService.existsJoinRequest(user.getId())) {
+        JoinRequest exists = joinRequestRepository.findByUserIdAndClubIdAndAccepted(user.getId(), clubid, false);
+
+        if (exists != null) {
             return ResponseEntity.ok().body(null);
         }
 
@@ -122,6 +125,16 @@ public class ClubController {
         return joinRequestService.getJoinRequests(clubid);
     }
 
+    // Get active Request of User
+    @GetMapping("users/requests")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public JoinRequest findActiveRequests (HttpServletRequest header) {
+        String token = header.getHeader("Authorization");
+        User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(token.substring(7)))
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+        return joinRequestRepository.findByUserIdAndAccepted(user.getId(), false);
+    }
+
     // Accept a JoinRequest
     @PutMapping("requests/{requestid}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -133,6 +146,21 @@ public class ClubController {
         request.setEditedAt(new Timestamp(System.currentTimeMillis()));
         joinRequestService.updateJoinRequest(request);
         return ResponseEntity.ok().body(true);
+    }
+
+    // Delete active JoinRequest
+    @DeleteMapping("requests")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public Map<String, Boolean> deleteJoinRequest(HttpServletRequest header){
+        String token = header.getHeader("Authorization");
+        User user = userRepository.findByUsername(jwtUtils.getUserNameFromJwtToken(token.substring(7)))
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+        JoinRequest request = joinRequestRepository.findByUserIdAndAccepted(user.getId(), false);
+        joinRequestService.deleteJoinRequest(request);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
 
 }
