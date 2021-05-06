@@ -42,7 +42,6 @@ public class UserController {
         } else {
             return ResponseEntity.ok().body("");
         }
-
     }
 
 }

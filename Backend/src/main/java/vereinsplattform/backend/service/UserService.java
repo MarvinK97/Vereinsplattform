@@ -10,7 +10,6 @@ public interface UserService {
     default List<UserRepository.AdminUserView> getUsers() {
         return null;
     }
-
     default Long inClub(String jwt) {
         return null;
     }
