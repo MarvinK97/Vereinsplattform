@@ -3,6 +3,7 @@ package vereinsplattform.backend.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class Notification implements Serializable {
 
     private Timestamp editedAt = new Timestamp(System.currentTimeMillis());
 
-    @NotBlank
+    @NotNull
     private Long clubId;
 
     public Notification(){

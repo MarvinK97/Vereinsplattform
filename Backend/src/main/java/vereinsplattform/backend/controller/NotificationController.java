@@ -45,7 +45,7 @@ public class NotificationController {
 
     // Create a new Notification
     @PostMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public Notification createNotificiation (@RequestBody CreateNotificationRequest request) {
         Notification notification = new Notification(request.getMessage(), request.getClubid());
         return notificationService.saveNotification(notification);

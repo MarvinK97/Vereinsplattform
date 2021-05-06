@@ -18,4 +18,12 @@ export class NewsfeedService {
     return this.http.get(API_URL + 'clubs/' + clubid);
   }
 
+  createNews(message: string, clubid: number): Observable<any> {
+    return  this.http.post(API_URL, {
+      message: message,
+      clubid: clubid
+    }, httpOptions);
+  }
+
 }
+

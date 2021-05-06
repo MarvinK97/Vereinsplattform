@@ -5,6 +5,8 @@ import {MatSort} from "@angular/material/sort";
 import {ClubManagementService} from "../../core/services/club-management.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ClubService} from "../../core/services/club.service";
+import {NewsfeedService} from "../../core/services/newsfeed.service";
+import {TokenStorageService} from "../../core/services/auth/token-storage.service";
 
 
 @Component({
@@ -25,17 +27,22 @@ export class SearchClubComponent implements OnInit, AfterViewInit {
   clubs: string | undefined;
   columnsToDisplayClub = ['name', 'street', 'plz', 'ort'];
   expandedElement: Club | null;
+  text: string;
+  currentUser: any;
 
   dataSourceClub = new MatTableDataSource<Club>();
   @ViewChild('TableClubPaginator', {static: true, read: MatPaginator}) paginatorClub: MatPaginator;
   @ViewChild('TableClubSort') sortClub: MatSort;
 
   constructor(private clubManagementService: ClubManagementService,
-              private clubService: ClubService) { }
+              private clubService: ClubService,
+              private newsfeedService: NewsfeedService,
+              private tokenStorage: TokenStorageService) { }
 
   ngOnInit(): void {
     this.getClubList();
     this.getActiveRequest();
+    this.currentUser = this.tokenStorage.getUser();
   }
 
   ngAfterViewInit(): void {
@@ -85,13 +92,18 @@ export class SearchClubComponent implements OnInit, AfterViewInit {
   }
 
   deleteActiveRequest(): void {
-    console.log("111111111111111")
     this.clubManagementService.deleteActiveRequest().subscribe(
       data => {
         console.log(JSON.stringify(data));
         window.location.reload();
       }
     )
+  }
+
+  contactClub(club: Club): void {
+    this.newsfeedService.createNews("Hello, please contact me, my email is:" + this.currentUser.email , club.id).subscribe( data => {
+      console.log(JSON.stringify(data));
+    })
   }
 
 }
