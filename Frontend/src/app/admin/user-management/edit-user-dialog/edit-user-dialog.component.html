@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Bearbeite User</h2>
+
+<mat-dialog-content class="mat-typography">
+
+  <div>
+    <form [formGroup]="form">
+
+      <mat-form-field appearance="fill">
+        <mat-label>ID</mat-label>
+        <input matInput required formControlName="id" id="id" readonly>
+        <mat-error *ngIf="(form.get('id').invalid) && (form.get('id').touched)" class="alert-danger">
+          Keine Korrekte Eingabe!
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput required formControlName="username" id="username">
+        <mat-error *ngIf="(form.get('username').invalid) && (form.get('username').touched)" class="alert-danger">
+          Keine Korrekte Eingabe!
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Straße</mat-label>
+        <input matInput required formControlName="email" id="email">
+        <mat-error *ngIf="(form.get('email').invalid) && (form.get('email').touched)" class="alert-danger">
+          Keine Korrekte Eingabe!
+        </mat-error>
+      </mat-form-field><br>
+
+    </form>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button [mat-dialog-close]="true" color="warn" (click)="delete()">Delete</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="submit(form)" *ngIf="form.status === 'VALID'" color="success">Save</button>
+  <button mat-button [mat-dialog-close]="true" disabled *ngIf="form.status === 'INVALID'">Save</button>
+</mat-dialog-actions>
+

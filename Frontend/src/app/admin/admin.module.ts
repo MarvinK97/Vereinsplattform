@@ -8,6 +8,7 @@ import {EditClubDialogComponent} from './club-management/edit-club-dialog/edit-c
 import {AddClubDialogComponent} from './club-management/add-club-dialog/add-club-dialog.component';
 import {AdminComponent} from './admin.component';
 import {AdminMaterialModule} from "./admin-material.module";
+import {EditUserDialogComponent} from "./user-management/edit-user-dialog/edit-user-dialog.component";
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import {AdminMaterialModule} from "./admin-material.module";
     ClubManagementComponent,
     UserManagementComponent,
     EditClubDialogComponent,
-    AddClubDialogComponent
+    AddClubDialogComponent,
+    EditUserDialogComponent
   ],
   imports: [
     AdminRoutingModule,

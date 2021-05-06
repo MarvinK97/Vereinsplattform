@@ -24,7 +24,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></mat-header-row>
-    <mat-row class="hover" *matRowDef="let row; columns: columnsToDisplay" (click)="onRowClicked(row)"></mat-row>
+    <mat-row class="hover" *matRowDef="let row; columns: columnsToDisplay" (click)="openEditUserDialog(row)"></mat-row>
 
     <mat-row *matNoDataRow>
       <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>

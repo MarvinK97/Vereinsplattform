@@ -6,6 +6,8 @@ import {UserManagementService} from '../../core/services/user-management.service
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {EditUserDialogComponent} from "./edit-user-dialog/edit-user-dialog.component";
 
 export interface User {
   username: string;
@@ -28,9 +30,12 @@ export class UserManagementComponent implements OnInit, AfterViewInit {
   @ViewChild('TableUserPaginator', {static: true, read: MatPaginator}) paginator: MatPaginator;
   @ViewChild('TableUserSort') sort: MatSort;
 
+  // Dialogs
+  editUserDialogRef: MatDialogRef<EditUserDialogComponent>;
 
   constructor(private userService: UserService,
               private userManagementService: UserManagementService,
+              private dialogEditUser: MatDialog
               ) { }
 
   ngOnInit(): void {
@@ -45,7 +50,7 @@ export class UserManagementComponent implements OnInit, AfterViewInit {
 
 
   getUserList(): void {
-    this.userManagementService.getAllUsersExtended().subscribe(
+    this.userManagementService.getAllUsers().subscribe(
       data => {
         this.users = JSON.parse(data);
         this.dataSource.data = JSON.parse(data);
@@ -70,5 +75,42 @@ export class UserManagementComponent implements OnInit, AfterViewInit {
     alert('clicked me!');
     console.log('Row clicked: ', row);
   }
+
+  openEditUserDialog(row): void {
+    const rowOld = row;
+
+    this.editUserDialogRef = this.dialogEditUser.open(EditUserDialogComponent, {
+      hasBackdrop: false,
+      data: {
+        id: row.id,
+        email: row.email,
+        username: row.username
+      }
+    });
+
+    this.editUserDialogRef
+      .afterClosed()
+      .subscribe(res => {
+        if (res === 'delete') {
+          this.userManagementService.deleteUser(row).subscribe((res) => {
+            console.log(res);
+            this.getUserList();
+          });
+        } else {
+          if (res) {
+            if (res === JSON.stringify(rowOld)) {
+              // console.log('No value changed!');
+            } else {
+              this.userManagementService.updateUser(JSON.parse(res)).subscribe(
+                () => {
+                  this.getUserList();
+                });
+            }
+          }
+        }
+      })
+  }
+
+
 
 }

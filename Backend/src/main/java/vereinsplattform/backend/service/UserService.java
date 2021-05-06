@@ -16,4 +16,10 @@ public interface UserService {
     default Long inClub(User user) {
         return null;
     }
+    default User updateUser(User user) {
+        return null;
+    }
+    default void deleteUser(Long userid) {
+
+    }
 }

@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     //Projection für Mitgliederverwaltung
     interface AdminUserView {
-        String getId();
+        Long getId();
         String getUsername();
         String getEmail();
         Set<Role> getRoles();
