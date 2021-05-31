@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Erstelle einen neuen Termin</h2>
+
+<mat-dialog-content class="mat-typography">
+
+  <div>
+    <form [formGroup]="form">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Start date">
+          <input matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+
+
+
+      <mat-form-field appearance="fill">
+        <mat-label>start</mat-label>
+        <input matInput required formControlName="start" id="start">
+        <div *ngIf="(form.get('start').invalid) && (form.get('start').touched)" class="alert-danger">
+          Keine Korrekte Eingabe!
+        </div>
+      </mat-form-field><br>
+
+      <mat-form-field appearance="fill">
+        <mat-label>end</mat-label>
+        <input matInput required formControlName="end" id="end">
+        <div *ngIf="(form.get('end').invalid) && (form.get('end').touched)" class="alert-danger">
+          Keine Korrekte Eingabe!
+        </div>
+      </mat-form-field><br>
+
+      <mat-form-field appearance="fill">
+        <mat-label>title</mat-label>
+        <input matInput required formControlName="title" id="title">
+        <div *ngIf="(form.get('title').invalid) && (form.get('title').touched)" class="alert-danger">
+          Keine Korrekte Eingabe!
+        </div>
+      </mat-form-field><br>
+
+      <mat-form-field appearance="fill">
+        <mat-label>color</mat-label>
+        <input matInput required formControlName="color" id="color">
+        <div *ngIf="(form.get('color').invalid) && (form.get('color').touched)" class="alert-danger">
+          Keine Korrekte Eingabe!
+        </div>
+      </mat-form-field><br>
+
+      <mat-checkbox formControlName="allDay" id="allDay">AllDay</mat-checkbox>
+
+    </form>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="submit(form)" *ngIf="form.status === 'VALID'">Create</button>
+  <button mat-button [mat-dialog-close]="true" disabled *ngIf="form.status === 'INVALID'">Create</button>
+</mat-dialog-actions>

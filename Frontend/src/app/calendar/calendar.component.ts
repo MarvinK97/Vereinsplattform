@@ -1,22 +1,14 @@
-import {ChangeDetectionStrategy, Component, TemplateRef, ViewChild,} from '@angular/core';
-import {addDays, addHours, endOfDay, endOfMonth, startOfDay, subDays,} from 'date-fns';
-import {Subject} from 'rxjs';
-import {CalendarEvent, CalendarView,} from 'angular-calendar';
 
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};
+import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild,} from '@angular/core';
+import {addDays, addHours, endOfDay, endOfMonth, startOfDay, subDays,} from 'date-fns';
+import {Observable, Subject} from 'rxjs';
+import {CalendarEvent, CalendarView,} from 'angular-calendar';
+import {CalendarService} from "../core/services/calendar.service";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+
+import {AddEventDialogComponent} from "./add-event-dialog/add-event-dialog.component";
+import {Club} from "../user/club-details/club-details.component";
+import {ClubService} from "../core/services/club.service";
 
 @Component({
   selector: 'app-calendar',
@@ -24,52 +16,21 @@ const colors: any = {
   styleUrls: ['./calendar.component.css'],
   templateUrl: './calendar.component.html',
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit {
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any> | undefined;
+
+  club: Club;
+
+  // Dialogs
+  addEventDialogRef: MatDialogRef<AddEventDialogComponent>;
 
   // Standard Ansicht festlegen
   view: CalendarView = CalendarView.Week;
   CalendarView = CalendarView;
   activeDayIsOpen = true;
 
-  // Events,welche angezeigt werden
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
+  // Events, welche angezeigt werden
+  events: CalendarEvent[];
 
   // Aktuelles Datum
   viewDate: Date = new Date();
@@ -77,11 +38,40 @@ export class CalendarComponent {
   // Reload Elements
   refresh: Subject<any> = new Subject();
 
-  constructor() {}
+  constructor(private calenderService: CalendarService,
+              private dialogAddEvent: MatDialog,
+              private clubService: ClubService) {}
+
+  ngOnInit() {
+    // Get Users club
+    this.clubService.getClub().subscribe(res => {
+      this.club = res;
+      // Get Events
+      this.calenderService.getCalendarEvents(this.club.id).subscribe(data => {
+        this.events = data;
+      })
+    })
+  }
 
   // ---------------------------------------------------
   // Funktionen / Events
   // ---------------------------------------------------
+
+  addEvent(): void {
+    this.addEventDialogRef = this.dialogAddEvent.open(AddEventDialogComponent);
+
+    this.addEventDialogRef
+      .afterClosed()
+      .subscribe(res => {
+        //console.log(JSON.parse(res));
+        this.calenderService.addEvent(JSON.parse(res), this.club.id).subscribe(
+          () => {
+            this.calenderService.getCalendarEvents(this.club.id);
+          });
+      });
+  }
+
+/*
   addEvent(): void {
     this.events = [
       ...this.events,
@@ -97,7 +87,7 @@ export class CalendarComponent {
         },
       },
     ];
-  }
+  } */
 
   // tslint:disable-next-line:typedef
   deleteEvent(eventToDelete: CalendarEvent) {
@@ -114,3 +104,22 @@ export class CalendarComponent {
     this.activeDayIsOpen = false;
   }
 }
+
+
+
+
+
+const colors: any = {
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3',
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF',
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA',
+  },
+};
