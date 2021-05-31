@@ -59,9 +59,6 @@ const routes: Routes = [
     MatDatepickerModule,
     MatInputModule,
 
-    NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule,
-    NgxMatNativeDateModule
   ]
 })
 export class CalendarModule { }
