@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {CalendarEvent} from "angular-calendar";
 import {Observable} from "rxjs";
-import {addDays, addHours, endOfMonth, startOfDay, subDays} from "date-fns";
-import {Club} from "../../user/club-details/club-details.component";
+import {addDays, addHours, startOfDay, subDays} from "date-fns";
 
 const API_URL = 'http://localhost:8080/api/calendars/';
 const httpOptions = {
@@ -19,20 +18,24 @@ export class CalendarService {
   constructor(private http: HttpClient) { }
 
   getCalendarEvents(id: number): Observable<any> {
-    return this.http.get(API_URL + 'clubs' + id, { responseType: 'text' });
+    return this.http.get<CalendarEvent[]>(API_URL + 'clubs/' + id);
   }
 
   addEvent(event: CalendarEvent, id: number): Observable<any> {
+    console.log('ClubId:' + id);
     return this.http.post(API_URL + '', {
       start: event.start,
       end: event.end,
       title: event.title,
       color: event.color,
       allDay: event.allDay,
-      cludId: id
+      clubId: id
     }, httpOptions);
   }
 
+  deleteEvent(event: CalendarEvent, id: number): Observable<any> {
+    return this.http.delete(API_URL + 'clubs' + id)
+  }
 
   events: CalendarEvent[] = [
     {

@@ -1,22 +1,59 @@
 package vereinsplattform.backend.entity;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "calendarEvents",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "eventId")
+        })
 public class CalendarEvent {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long eventId;
+    long clubId;
     String start;
     String end;
     String title;
     String color;
     Boolean allDay;
-    long clubId;
 
-    public CalendarEvent(String start, String end, String title, String color, Boolean allDay, long clubId) {
+    public CalendarEvent(long clubId, String start, String end, String title, String color, Boolean allDay) {
+        this.clubId = clubId;
         this.start = start;
         this.end = end;
         this.title = title;
         this.color = color;
         this.allDay = allDay;
+    }
+
+    @Override
+    public String toString() {
+        return "CalendarEvent{" +
+                "eventId=" + eventId +
+                ", clubId=" + clubId +
+                ", start='" + start + '\'' +
+                ", end='" + end + '\'' +
+                ", title='" + title + '\'' +
+                ", color='" + color + '\'' +
+                ", allDay=" + allDay +
+                '}';
+    }
+
+    public long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(long eventId) {
+        this.eventId = eventId;
+    }
+
+    public long getClubId() {
+        return clubId;
+    }
+
+    public void setClubId(long clubId) {
         this.clubId = clubId;
     }
 
@@ -58,13 +95,5 @@ public class CalendarEvent {
 
     public void setAllDay(Boolean allDay) {
         this.allDay = allDay;
-    }
-
-    public long getClubId() {
-        return clubId;
-    }
-
-    public void setClubId(long clubId) {
-        this.clubId = clubId;
     }
 }

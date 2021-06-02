@@ -1,7 +1,5 @@
-
 import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild,} from '@angular/core';
-import {addDays, addHours, endOfDay, endOfMonth, startOfDay, subDays,} from 'date-fns';
-import {Observable, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {CalendarEvent, CalendarView,} from 'angular-calendar';
 import {CalendarService} from "../core/services/calendar.service";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
@@ -30,7 +28,7 @@ export class CalendarComponent implements OnInit {
   activeDayIsOpen = true;
 
   // Events, welche angezeigt werden
-  events: CalendarEvent[];
+  events: CalendarEvent[] = [];
 
   // Aktuelles Datum
   viewDate: Date = new Date();
@@ -43,19 +41,51 @@ export class CalendarComponent implements OnInit {
               private clubService: ClubService) {}
 
   ngOnInit() {
+
+    console.log(JSON.stringify(new Date()));
+
     // Get Users club
     this.clubService.getClub().subscribe(res => {
       this.club = res;
-      // Get Events
-      this.calenderService.getCalendarEvents(this.club.id).subscribe(data => {
-        this.events = data;
-      })
+      this.getEvents();
     })
+
+    this.setView(CalendarView.Week);
   }
 
   // ---------------------------------------------------
   // Funktionen / Events
   // ---------------------------------------------------
+
+  getEvents(): void {
+    // Get Events
+    this.calenderService.getCalendarEvents(this.club.id).subscribe(data => {
+      data.forEach(element => {
+
+        this.events = [
+          ...this.events,
+          {
+            title: element.title,
+            start: new Date(element.start),
+            end: new Date(element.end),
+            color: this.colors[element.color],
+            allDay: element.allDay
+          },
+        ];
+
+        // this.events.push(element);
+        // console.log("Ich bin ein element");
+        // console.log(element);
+      });
+      // this.events = this.events1;
+      // this.events = data;
+      // console.log("Ich bin Events Array");
+      // console.log(this.events);
+      // console.log("Ich bin data");
+      // console.log(data);
+    })
+
+  }
 
   addEvent(): void {
     this.addEventDialogRef = this.dialogAddEvent.open(AddEventDialogComponent);
@@ -63,31 +93,16 @@ export class CalendarComponent implements OnInit {
     this.addEventDialogRef
       .afterClosed()
       .subscribe(res => {
-        //console.log(JSON.parse(res));
+        console.log(JSON.parse(res));
+        console.log(this.club.id);
         this.calenderService.addEvent(JSON.parse(res), this.club.id).subscribe(
           () => {
-            this.calenderService.getCalendarEvents(this.club.id);
+            console.log(this.club.id);
+            this.events = this.eventsEmpty;
+            this.getEvents();
           });
       });
   }
-
-/*
-  addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-      },
-    ];
-  } */
 
   // tslint:disable-next-line:typedef
   deleteEvent(eventToDelete: CalendarEvent) {
@@ -103,23 +118,29 @@ export class CalendarComponent implements OnInit {
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
+
+
+  colors: any = {
+    red: {
+      primary: '#ad2121',
+      secondary: '#FAE3E3',
+    },
+    blue: {
+      primary: '#1e90ff',
+      secondary: '#D1E8FF',
+    },
+    yellow: {
+      primary: '#e3bc08',
+      secondary: '#FDF1BA',
+    },
+  };
+
+  eventsEmpty: CalendarEvent[] = [];
+
+
 }
 
 
 
 
 
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};

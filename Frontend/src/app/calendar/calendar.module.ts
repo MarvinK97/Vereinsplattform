@@ -4,7 +4,7 @@ import {SharedModule} from '../shared/shared.module';
 
 import {CalendarComponent} from './calendar.component';
 import {CalendarCommonModule, CalendarDayModule, CalendarMonthModule, CalendarWeekModule} from 'angular-calendar';
-import { AddEventDialogComponent } from './add-event-dialog/add-event-dialog.component';
+import {AddEventDialogComponent} from './add-event-dialog/add-event-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatCheckboxModule} from "@angular/material/checkbox";
