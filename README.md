@@ -8,15 +8,20 @@ Zum Einsatz gekommen sind dabei die Frameworks Angular und Spring sowie die Cont
 Zum ausführen der Anwendung wird lediglich **Docker** als Laufzeitumgebung benötigt!
 
 > Node.js
+> 
 > Docker
+> 
 > JDK 8+
 
 ## Infos und Links
 [Docker Download](https://www.docker.com/products/docker-desktop)
+
 [NodeJs Download](https://nodejs.org/en/)
 
 [Docker Docs](https://docs.docker.com/)
+
 [Spring Docs](https://spring.io/projects)
+
 [Angular Docs](https://angular.io/docs)
 
 ## Starten der Anwendung
